@@ -22,6 +22,7 @@ export default function useApplicationData() {
       axios.get(request["GET_INTERVIEWERS"])
     ])
     .then(all => {
+      //console.log(all);
       const [responseDays, responseAppointments, responseInterviewers] = all;
       setState((prev) => ({
         ...prev, 
