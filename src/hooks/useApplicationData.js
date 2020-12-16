@@ -43,12 +43,16 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+    
+    const days = availableSpots(id, false);
+
     return axios
       .put(`/api/appointments/${id}`, { interview: {...interview} })
       .then(() => {
         setState({
           ...state,
-          appointments
+          appointments,
+          days
         })
       });
   }
@@ -62,15 +66,26 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
-    
+
+    const days = availableSpots(id);
+
     return axios
       .delete(`/api/appointments/${id}`)
       .then(() => {
         setState({
           ...state,
-          appointments
+          appointments,
+          days
         })
       });
+  }
+
+  function availableSpots(appointmentId, add = true){
+    const dayInfo = state.days.find(day => day.appointments.includes(appointmentId));
+    add ? dayInfo.spots++ : dayInfo.spots--;
+    const days = state.days;
+    days[dayInfo.id - 1] = dayInfo;
+    return days;
   }
 
   return { state, setDay, bookInterview, cancelInterview }
