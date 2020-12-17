@@ -39,8 +39,22 @@ export default function useApplicationData() {
       [id]: appointment
     };
     
+    const dayId = state.days.find(day => day.appointments.includes(id)).id - 1;
+    
+    const day = {
+      ...state.days[dayId], 
+      appointments: [...state.days[dayId].appointments],
+      interviewers: [...state.days[dayId].interviewers],
+      spots: --state.days[dayId].spots
+    }
+     
+    const days = [
+      ...state.days
+    ]
 
-    const days = availableSpots(id, false);
+    days[dayId] = day;
+
+    // console.log(days);
 
     return axios
       .put(`/api/appointments/${id}`, { interview: {...interview} })
@@ -63,7 +77,22 @@ export default function useApplicationData() {
       [id]: appointment
     }
 
-    const days = availableSpots(id);
+    const dayId = state.days.find(day => day.appointments.includes(id)).id - 1;
+    
+    const day = {
+      ...state.days[dayId], 
+      appointments: [...state.days[dayId].appointments],
+      interviewers: [...state.days[dayId].interviewers],
+      spots: ++state.days[dayId].spots
+    }
+     
+    const days = [
+      ...state.days
+    ]
+
+    days[dayId] = day;
+
+    // console.log(days);
 
     return axios
       .delete(`/api/appointments/${id}`)
@@ -76,13 +105,13 @@ export default function useApplicationData() {
       });
   }
 
-  function availableSpots(appointmentId, add = true){
-    const dayInfo = state.days.find(day => day.appointments.includes(appointmentId));
-    add ? dayInfo.spots++ : dayInfo.spots--;
-    const days = state.days;
-    days[dayInfo.id - 1] = dayInfo;
-    return days;
-  }
+  // function availableSpots(appointmentId, add = true){
+  //   const dayInfo = state.days.find(day => day.appointments.includes(appointmentId));
+  //   add ? dayInfo.spots++ : dayInfo.spots--;
+  //   const days = state.days;
+  //   days[dayInfo.id - 1] = dayInfo;
+  //   return days;
+  // }
 
   return { state, setDay, bookInterview, cancelInterview }
 }
