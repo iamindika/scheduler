@@ -11,18 +11,12 @@ export default function useApplicationData() {
   });
 
   useEffect(() => {
-    const request = {
-      "GET_DAYS"        : "http://localhost:8001/api/days",
-      "GET_APPOINTMENTS": "http://localhost:8001/api/appointments",
-      "GET_INTERVIEWERS": "http://localhost:8001/api/interviewers"
-    }
     Promise.all([
-      axios.get(request["GET_DAYS"]),
-      axios.get(request["GET_APPOINTMENTS"]),
-      axios.get(request["GET_INTERVIEWERS"])
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers")
     ])
     .then(all => {
-      //console.log(all);
       const [responseDays, responseAppointments, responseInterviewers] = all;
       setState((prev) => ({
         ...prev, 
@@ -45,6 +39,7 @@ export default function useApplicationData() {
       [id]: appointment
     };
     
+
     const days = availableSpots(id, false);
 
     return axios
