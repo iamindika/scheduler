@@ -30,10 +30,13 @@ export default function useApplicationData() {
   const setDay = day => setState({...state, day});
 
   function bookInterview(id, interview) {
+    const isEdit = state.appointments[id].interview ? true : false;
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
     };
+
     const appointments = {
       ...state.appointments,
       [id]: appointment
@@ -45,7 +48,7 @@ export default function useApplicationData() {
       ...state.days[dayId], 
       appointments: [...state.days[dayId].appointments],
       interviewers: [...state.days[dayId].interviewers],
-      spots: --state.days[dayId].spots
+      spots: isEdit ? state.days[dayId].spots : --state.days[dayId].spots
     }
      
     const days = [
